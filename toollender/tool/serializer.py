@@ -3,6 +3,6 @@ from tool.models import myTool
 
 
 class MyToolSerializer(serializers.ModelSerializer):
-    class meta:
+    class Meta:
         model = myTool
         fields = "__all__"
