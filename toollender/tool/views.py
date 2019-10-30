@@ -1,3 +1,13 @@
-from django.shortcuts import render
+from rest_framework import generics
+from .models import myTool
+from .serializer import MyToolSerializer
 
-# Create your views here.
+
+class MyToolList(generics.ListAPIView):
+    queryset = myTool.objects.all()
+    serializer_class = MyToolSerializer
+
+
+class MyToolDetail(generics.RetrieveAPIView):
+    queryset = myTool.objects.all()
+    serializer_class = MyToolSerializer
