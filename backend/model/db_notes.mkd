@@ -1,0 +1,60 @@
+# Data base notes
+
+Build with postgres in mind then would like to convert to mongoDB. Would like to know more about it and see how it compares to postgres
+
+## user TABLE
+
+| column name | type                                   | example      |
+| ----------- | -------------------------------------- | ------------ |
+| user_id     | SERIAL PRIMARY KEY                     | 1            |
+| first_name  | VARCHAR(20)                            | 'James'      |
+| last_name   | VARCHAR(20)                            | 'Smith'      |
+| username    | VARCHAR(20) UNIQUE                     | "DJ Avenger" |
+| email       | TEXT NOT NULL UNIQUE                   | 'jimbo'      |
+| pword       | TEXT NOT NULL                          | '1234'       |
+| join_date   | TIMESTAMP DEFAULT CURRENT_TIMESTAMP(2) |              |
+
+pword is for example only
+
+## group TABLE
+
+| column name | type                                   | example   |
+| ----------- | -------------------------------------- | --------- |
+| group_id    | SERIAL PRIMARY KEY                     | 1         |
+| gp_name     | VARCHAR(20)                            | "fellows" |
+| create_date | TIMESTAMP DEFAULT CURRENT_TIMESTAMP(2) |           |
+
+## tool TABLE
+
+status could be only a few going to try enum
+CREATE TYPE status AS ENUM ('available', 'unavailable', 'other');
+
+| column name | type                                               | example                  |
+| ----------- | -------------------------------------------------- | ------------------------ |
+| tool_id     | SERIAL PRIMARY KEY                                 | 1                        |
+| name        | VARCHAR(20) NOT NULL                               | "hammer"                 |
+| type        | VARCHAR(20)                                        | "basic"                  |
+| notes       | TEXT                                               | "swing hard to hit hard" |
+| status      | status                                             | 'available'              |
+| submit_date | TIMESTAMP DEFAULT CURRENT_TIMESTAMP(2)             |                          |
+| owner_id    | SERIAL REFERENCES users(user_ID) ON DELETE CASCADE | 1                        |
+
+## link_group_user
+
+groups can have many users and Users can be part of many groups. Requires an area to link all up
+
+| column name | type                                                | example |
+| ----------- | --------------------------------------------------- | ------- |
+| link_id     | SERIAL PRIMARY KEY                                  | 1       |
+| user_id     | SERIAL REFERENCES users(user_id) ON DELETE CASCADE  | 1       |
+| group_id    | SERIAL REFERENCES group(group_id) ON DELETE CASCADE | 1       |
+
+## link_group_tool
+
+groups can have many tool available to them and tools can be in many groups
+
+| column name | type                                                | example |
+| ----------- | --------------------------------------------------- | ------- |
+| link_id     | SERIAL PRIMARY KEY                                  | 1       |
+| tool_id     | SERIAL REFERENCES tool(tool_id) ON DELETE CASCADE   | 1       |
+| group_id    | SERIAL REFERENCES group(group_id) ON DELETE CASCADE | 1       |
